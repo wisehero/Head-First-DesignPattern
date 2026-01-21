@@ -9,11 +9,11 @@ public class PaymentResult {
     private final BigDecimal amount;
     private final PaymentStatus status;
 
-    public PaymentResult(String transactionId, PaymentType paymentType, BigDecimal amount, PaymentStatus status) {
+    public PaymentResult(String transactionId, PaymentType paymentType, BigDecimal amount) {
         this.transactionId = transactionId;
         this.paymentType = paymentType;
         this.amount = amount;
-        this.status = status;
+        this.status = PaymentStatus.SUCCESS;
     }
 
     public String getTransactionId() {
