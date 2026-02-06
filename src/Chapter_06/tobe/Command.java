@@ -10,4 +10,6 @@ package Chapter_06.tobe;
 public interface Command {
 
     void execute();
+
+    void undo();
 }

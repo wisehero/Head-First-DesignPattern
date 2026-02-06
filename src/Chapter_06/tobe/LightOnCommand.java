@@ -18,4 +18,9 @@ public class LightOnCommand implements Command{
     public void execute() {
         light.turnOn();  // Receiver에게 위임
     }
+
+    @Override
+    public void undo() {
+        light.turnOff();
+    }
 }
