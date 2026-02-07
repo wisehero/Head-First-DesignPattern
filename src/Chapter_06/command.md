@@ -48,13 +48,13 @@ public class AdminOrderController {
 - **Undo/이력 불가**: 실행된 작업의 이력을 추적하거나 되돌릴 방법이 없다.
 - **확장 비용**: 새로운 진입점(배치, 메시지 큐)을 추가할 때마다 동일한 조합 로직을 반복해야 한다.
 
-이 모든 문제는 **"요청(작업) 자체를 객체로 캡슐화하지 않았기 때문"**에 발생한다.
+이 모든 문제는 **"요청(작업) 자체를 객체로 캡슐화하지 않았기 때문"** 에 발생한다.
 
 ---
 
 ## 2. 패턴 정의 — 요청을 객체로 만들어라
 
-커맨드 패턴은 수행할 작업을 **독립적인 객체**로 캡슐화하여, 요청의 **발신자(Invoker)**와 **수신자(Receiver)**를 분리하는 패턴이다.
+커맨드 패턴은 수행할 작업을 **독립적인 객체**로 캡슐화하여, 요청의 **발신자(Invoker)** 와 **수신자(Receiver)** 를 분리하는 패턴이다.
 
 핵심 아이디어는 `cancelOrder()`라는 **동작**을 `CancelOrderCommand`라는 **객체**로 승격시키는 것이다.
 작업이 객체가 되면 저장, 전달, 큐잉, 취소가 모두 가능해진다.
@@ -469,7 +469,7 @@ public Step cleanupStep(JobRepository jobRepository,
 
 #### 실무 확장: 커맨드 + 이벤트 기반 아키텍처 (CQRS)
 
-Spring의 `ApplicationEventPublisher`를 활용하면, 커맨드 객체를 이벤트로 발행하고 별도 핸들러에서 비동기 처리할 수 있다. 이것이 **CQRS(Command Query Responsibility Segregation)**의 기초가 된다.
+Spring의 `ApplicationEventPublisher`를 활용하면, 커맨드 객체를 이벤트로 발행하고 별도 핸들러에서 비동기 처리할 수 있다. 이것이 **CQRS(Command Query Responsibility Segregation)** 의 기초가 된다.
 
 ```java
 // 커맨드를 Record로 정의
