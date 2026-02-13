@@ -4,7 +4,7 @@ public class AirConditioner {
     private boolean on = false;
     private int temperature = 24;
 
-    public void turnOn(){
+    public void turnOn() {
         on = true;
         System.out.println("❄️ 에어컨이 켜졌습니다. 현재 온도: " + temperature + "도");
     }

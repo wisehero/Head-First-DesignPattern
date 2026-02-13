@@ -25,11 +25,12 @@ public class AirconSetTempCommand implements Command {
 
     @Override
     public void execute() {
+        this.previousTemp = aircon.getTemperature();  // 이전 온도 백업
         aircon.setTemperature(targetTemp);
     }
 
     @Override
     public void undo() {
-
+        aircon.setTemperature(previousTemp);  // 이전 온도로 복원
     }
 }

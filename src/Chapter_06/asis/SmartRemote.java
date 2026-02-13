@@ -10,6 +10,7 @@ public class SmartRemote {
         this.aircon = aircon;
     }
 
+    // 버튼 1: 조명 켜기
     public void pressButton1() {
         light.turnOn();
     }

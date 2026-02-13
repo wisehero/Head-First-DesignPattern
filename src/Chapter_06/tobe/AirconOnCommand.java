@@ -17,6 +17,6 @@ public class AirconOnCommand implements Command {
 
     @Override
     public void undo() {
-
+        aircon.turnOff();
     }
 }
