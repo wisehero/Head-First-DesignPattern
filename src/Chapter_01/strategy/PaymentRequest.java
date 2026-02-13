@@ -1,6 +1,7 @@
 package Chapter_01.strategy;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class PaymentRequest {
 
@@ -18,19 +19,46 @@ public class PaymentRequest {
     // 간편 결제용
     private final String kakaoUserId;
 
-    public PaymentRequest(Long orderId, BigDecimal amount, String cardNumber, String cvc) {
-        this.orderId = orderId;
-        this.amount = amount;
+    private PaymentRequest(
+            Long orderId,
+            BigDecimal amount,
+            String cardNumber,
+            String cvc,
+            String bankCode,
+            String accountNumber,
+            String kakaoUserId
+    ) {
+        this.orderId = Objects.requireNonNull(orderId, "orderId must not be null");
+        this.amount = Objects.requireNonNull(amount, "amount must not be null");
         this.cardNumber = cardNumber;
         this.cvc = cvc;
-        this.bankCode = null;
-        this.accountNumber = null;
-        this.kakaoUserId = null;
+        this.bankCode = bankCode;
+        this.accountNumber = accountNumber;
+        this.kakaoUserId = kakaoUserId;
+    }
+
+    public static PaymentRequest card(Long orderId, BigDecimal amount, String cardNumber, String cvc) {
+        return new PaymentRequest(orderId, amount, cardNumber, cvc, null, null, null);
+    }
+
+    public static PaymentRequest bankTransfer(Long orderId, BigDecimal amount, String bankCode, String accountNumber) {
+        return new PaymentRequest(orderId, amount, null, null, bankCode, accountNumber, null);
+    }
+
+    public static PaymentRequest kakaoPay(Long orderId, BigDecimal amount, String kakaoUserId) {
+        return new PaymentRequest(orderId, amount, null, null, null, null, kakaoUserId);
+    }
+
+    public PaymentRequest(Long orderId, BigDecimal amount, String cardNumber, String cvc) {
+        this(orderId, amount, cardNumber, cvc, null, null, null);
     }
 
     public PaymentRequest(Long orderId, BigDecimal amount, String bankCode, String accountNumber, boolean isBank) {
-        this.orderId = orderId;
-        this.amount = amount;
+        if (!isBank) {
+            throw new IllegalArgumentException("은행 이체 요청 생성자는 isBank=true로 호출해야 합니다.");
+        }
+        this.orderId = Objects.requireNonNull(orderId, "orderId must not be null");
+        this.amount = Objects.requireNonNull(amount, "amount must not be null");
         this.cardNumber = null;
         this.cvc = null;
         this.bankCode = bankCode;
@@ -39,13 +67,7 @@ public class PaymentRequest {
     }
 
     public PaymentRequest(Long orderId, BigDecimal amount, String kakaoUserId) {
-        this.orderId = orderId;
-        this.amount = amount;
-        this.cardNumber = null;
-        this.cvc = null;
-        this.bankCode = null;
-        this.accountNumber = null;
-        this.kakaoUserId = kakaoUserId;
+        this(orderId, amount, null, null, null, null, kakaoUserId);
     }
 
     public Long getOrderId() {

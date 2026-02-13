@@ -12,7 +12,16 @@ public class PaymentStrategyRegistry {
 
     // 전략 등록
     public void register(PaymentStrategy strategy) {
-        strategies.put(strategy.getPaymentType(), strategy);
+        if (strategy == null) {
+            throw new PaymentException("전략은 null일 수 없습니다");
+        }
+
+        PaymentType paymentType = strategy.getPaymentType();
+        if (strategies.containsKey(paymentType)) {
+            throw new PaymentException("이미 등록된 결제 전략입니다: " + paymentType);
+        }
+
+        strategies.put(paymentType, strategy);
     }
 
     // 전략 조회

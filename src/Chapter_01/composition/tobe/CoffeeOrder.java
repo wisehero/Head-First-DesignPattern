@@ -2,6 +2,7 @@ package Chapter_01.composition.tobe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CoffeeOrder {
@@ -9,12 +10,12 @@ public class CoffeeOrder {
     private final List<CoffeeOption> options;
 
     public CoffeeOrder(Coffee baseCoffee) {
-        this.baseCoffee = baseCoffee;
+        this.baseCoffee = Objects.requireNonNull(baseCoffee, "baseCoffee must not be null");
         this.options = new ArrayList<>();
     }
 
     public CoffeeOrder addOption(CoffeeOption option) {
-        options.add(option);
+        options.add(Objects.requireNonNull(option, "option must not be null"));
         return this;
     }
 

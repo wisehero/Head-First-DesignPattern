@@ -33,10 +33,14 @@ public class CardPaymentStrategy implements PaymentStrategy{
                 request.getCvc(),
                 request.getAmount()
         );
+        PaymentStatus status = "00".equals(response.getResponseCode())
+                ? PaymentStatus.SUCCESS
+                : PaymentStatus.FAILED;
         return new PaymentResult(
                 response.getTransactionId(),
                 PaymentType.CARD,
-                request.getAmount());
+                request.getAmount(),
+                status);
     }
 
     @Override

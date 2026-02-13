@@ -25,7 +25,10 @@ public class KakaoPayStrategy implements PaymentStrategy{
                 request.getKakaoUserId(),
                 request.getAmount()
         );
-        return new PaymentResult(response.getTid(), getPaymentType(), request.getAmount());
+        PaymentStatus status = "SUCCESS".equals(response.getStatus())
+                ? PaymentStatus.SUCCESS
+                : PaymentStatus.FAILED;
+        return new PaymentResult(response.getTid(), getPaymentType(), request.getAmount(), status);
     }
 
     @Override

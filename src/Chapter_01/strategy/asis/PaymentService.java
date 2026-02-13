@@ -40,10 +40,14 @@ public class PaymentService {
                     request.getCvc(),
                     request.getAmount()
             );
+            PaymentStatus status = "00".equals(response.getResponseCode())
+                    ? PaymentStatus.SUCCESS
+                    : PaymentStatus.FAILED;
             return new PaymentResult(
                     response.getTransactionId(),
                     PaymentType.CARD,
-                    request.getAmount());
+                    request.getAmount(),
+                    status);
         } else if (paymentType == PaymentType.BANK_TRANSFER) {
             // 계좌이체 유효성 검증
             if (request.getBankCode() == null) {
@@ -59,7 +63,10 @@ public class PaymentService {
                     request.getAccountNumber(),
                     request.getAmount()
             );
-            return new PaymentResult(response.getTransactionId(), PaymentType.BANK_TRANSFER, request.getAmount());
+            PaymentStatus status = response.isSuccess()
+                    ? PaymentStatus.SUCCESS
+                    : PaymentStatus.FAILED;
+            return new PaymentResult(response.getTransactionId(), PaymentType.BANK_TRANSFER, request.getAmount(), status);
         } else if (paymentType == PaymentType.KAKAO_PAY) {
             // 카카오페이 유효성 검증
             if (request.getKakaoUserId() == null) {
@@ -71,13 +78,16 @@ public class PaymentService {
                     request.getKakaoUserId(),
                     request.getAmount()
             );
-            return new PaymentResult(response.getTid(), PaymentType.KAKAO_PAY, request.getAmount());
+            PaymentStatus status = "SUCCESS".equals(response.getStatus())
+                    ? PaymentStatus.SUCCESS
+                    : PaymentStatus.FAILED;
+            return new PaymentResult(response.getTid(), PaymentType.KAKAO_PAY, request.getAmount(), status);
         }
 
         // 토스페이 추가되면 여기에 또 다른 else if 블록이 추가될 것임
         // 코드가 점점 더 길어지고 복잡해짐
 
-        throw new PaymentException("지원하지 않는 결제 수단입니다" + paymentType);
+        throw new PaymentException("지원하지 않는 결제 수단입니다: " + paymentType);
     }
 
     /**

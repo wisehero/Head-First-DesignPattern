@@ -28,7 +28,10 @@ public class BankTransferStrategy implements PaymentStrategy{
                 request.getAccountNumber(),
                 request.getAmount()
         );
-        return new PaymentResult(response.getTransactionId(), getPaymentType(), request.getAmount());
+        PaymentStatus status = response.isSuccess()
+                ? PaymentStatus.SUCCESS
+                : PaymentStatus.FAILED;
+        return new PaymentResult(response.getTransactionId(), getPaymentType(), request.getAmount(), status);
     }
 
 

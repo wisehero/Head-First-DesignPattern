@@ -13,7 +13,7 @@ public class AsIsMain {
 
         // 1. 카드 결제
         System.out.println("=== 카드 결제 ===");
-        PaymentRequest cardRequest = new PaymentRequest(
+        PaymentRequest cardRequest = PaymentRequest.card(
                 1001L,
                 new BigDecimal("50000"),
                 "1234567890123456",
@@ -24,7 +24,7 @@ public class AsIsMain {
 
         // 2. 카카오페이 결제
         System.out.println("\n=== 카카오페이 결제 ===");
-        PaymentRequest kakaoRequest = new PaymentRequest(
+        PaymentRequest kakaoRequest = PaymentRequest.kakaoPay(
                 1002L,
                 new BigDecimal("30000"),
                 "kakao_user_123"
