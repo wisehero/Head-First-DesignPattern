@@ -5,7 +5,7 @@ public class ConfigManagerV2 {
 
     private static boolean isCreated = false; // 이것 자체도 리플렉션으로 조작이 가능하다.
 
-    public ConfigManagerV2() {
+    private ConfigManagerV2() {
         if (isCreated) {
             throw new IllegalStateException(
                     "싱글톤 객체는 이미 생성되었습니다! 리플렉션으로 생성할 수 없습니다."

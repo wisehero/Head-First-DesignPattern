@@ -256,7 +256,6 @@ Fail-Fast)할 수 있기 때문이다.
 메서드가 호출되는 순간 비로소 진짜 Bean을 생성한다.
 
 ```java
-
 @Service
 @Lazy  // 실제 사용 시점까지 생성 지연
 public class AdminReportService { ...
@@ -291,7 +290,7 @@ public class DefaultSingletonBeanRegistry {
 
 ## 5. 싱글톤의 실무 사례
 
-싱글톤이 적합한 대상의 공통점은 **"이 객체가 여러 개 존재하면 상태가 불일치하거나, 리소스가 낭비되거나, 관리가 불가능해진다"** 는 것이다.
+싱글톤이 적합한 대상에는 공통점이 있다. 인스턴스가 여러 개 존재하면 상태 불일치나 리소스 낭비가 발생하는 객체들이다.
 
 **Logger** — SLF4J의 `LoggerFactory`는 내부적으로 `ConcurrentHashMap`에 이름별로 Logger를 캐싱한다. 같은 이름으로 `getLogger()`를 여러 번 호출해도 동일한
 인스턴스가 반환된다. 엄밀히는 이름별로 하나씩 존재하는 "멀티톤(Multiton)" 패턴이지만, 핵심 원리는 싱글톤과 동일하다.
@@ -344,7 +343,6 @@ public class OrderService {
 싱글톤이 상태를 가지고 있을 때, 한 테스트에서 변경한 상태가 다음 테스트에 영향을 미친다.
 
 ```java
-
 @Test
 void 첫번째_테스트() {
     ShoppingCart.getInstance().addItem("노트북");
@@ -393,7 +391,6 @@ public class OrderService {
 이제 테스트에서 Mock을 자유롭게 주입할 수 있다.
 
 ```java
-
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
@@ -427,8 +424,7 @@ Spring은 이 구조를 컨테이너를 통해 자동으로 연결해 준다.
 
 ### Anti-Pattern 경고
 
-**전역 상태 남용** — 싱글톤이 많아지면 결국 전역 변수와 다를 바 없어 코드 추적이 어려워진다. **테스트 어려움** — `getInstance()`에 직접 의존하면 Mock으로 교체하기 힘들다. **숨겨진
-의존성** — 생성자에 드러나지 않고 메서드 내부에서 `getInstance()`를 호출하면 의존 관계가 보이지 않는다.
+싱글톤이 많아지면 결국 전역 변수와 다를 바 없어 코드 추적이 어려워진다. `getInstance()`에 직접 의존하면 Mock으로 교체하기 힘들고, 생성자에 드러나지 않고 메서드 내부에서 호출하면 의존 관계가 숨겨진다.
 
 ### 사용하지 말아야 할 때
 

@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 
 public class ReflectionAttack {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         // 1. 정상적인 방법으로 싱글톤 인스턴스 획득
         ConfigManagerV2 instance1 = ConfigManagerV2.getInstance();
 

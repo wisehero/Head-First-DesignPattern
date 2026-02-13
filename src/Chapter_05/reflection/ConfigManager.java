@@ -2,7 +2,7 @@ package Chapter_05.reflection;
 
 public class ConfigManager {
 
-    public ConfigManager() {
+    private ConfigManager() {
         System.out.println("ConfigManager instance created.");
     }
 

@@ -17,7 +17,7 @@ public enum EnumConfigManager {
         return configs.get(key);
     }
 
-    public void setConfigs(String key, String value) {
+    public void setConfig(String key, String value) {
         configs.put(key, value);
     }
 }
