@@ -86,9 +86,15 @@ class CustomSet<E> extends HashSet<E> {
     private int addCount = 0;
 
     @Override
+    public boolean add(E e) {
+        addCount++;
+        return super.add(e);
+    }
+
+    @Override
     public boolean addAll(Collection<? extends E> c) {
         addCount += c.size();
-        return super.addAll(c);  // 내부적으로 add()를 호출 → 중복 카운트!
+        return super.addAll(c);  // 내부적으로 add() 호출 시 중복 카운트 가능
     }
 }
 ```
@@ -225,7 +231,7 @@ flowchart LR
 
 **적절한 상속의 조건:**
 
-1. 진정한 is-a 관계일 때 (정사각형은 직사각형인가? → 아님!)
+1. 진정한 is-a 관계일 때 (예: 정사각형/직사각형은 수학적으로 is-a지만, 가변 모델에서는 LSP 위반이 쉽게 발생)
 2. 부모 클래스가 확장을 목적으로 설계되었을 때
 3. 자식이 리스코프 치환 원칙(LSP)을 준수할 때
 
@@ -306,4 +312,4 @@ StateContext o--> State
 
 > "일단 구성을 먼저 고려하고, 정말 필요할 때만 상속을 사용하라"
 
-구성은 더 유연하고, 캡슐화를 보존하며, 변화에 강한 설계를 가능하게 합니다. 상속은 코드 재사용의 쉬운 방법처럼 보이지만, 장기적으로는 구성이 더 나은 선택인 경우가 많습니다.
+구성은 캡슐화를 보존하면서 런타임에 행위를 교체할 수 있어 변화에 강합니다. 상속은 코드 재사용의 쉬운 방법처럼 보이지만, 장기적으로는 구성이 더 나은 선택인 경우가 많습니다.

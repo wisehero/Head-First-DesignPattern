@@ -1,8 +1,8 @@
 # 스프링 프레임워크의 전략 패턴 적용 사례
 
-스프링 프레임워크는 전략 패턴의 보고(寶庫)라고 해도 과언이 아닙니다. 프레임워크 전체가 **"인터페이스에 의존하라"** 는 원칙 위에 설계되어 있고, 이것이 곧 전략 패턴입니다.
+스프링 프레임워크는 전략 패턴을 매우 폭넓게 활용합니다. 프레임워크 전반이 **"인터페이스에 의존하라"** 는 원칙 위에 설계되어 있으며, 전략 패턴도 그 핵심 도구 중 하나입니다.
 
-덕분에 스프링을 사용하는 개발자들은 구현 기술(JDBC/JPA, BCrypt/Argon2, Redis/EhCache 등)을 자유롭게 교체할 수 있습니다.
+덕분에 스프링을 사용하는 개발자들은 구현 기술(JDBC/JPA, BCrypt/Argon2, Redis/Ehcache 등)을 자유롭게 교체할 수 있습니다.
 
 ---
 
@@ -108,7 +108,6 @@ classDiagram
 나중에 더 강력한 알고리즘으로 교체하고 싶다면, 빈 설정만 바꾸면 됩니다. 비밀번호를 검증하는 서비스 코드는 전혀 수정할 필요가 없습니다.
 
 ```java
-
 @Bean
 public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();     // 현재 전략
@@ -156,7 +155,7 @@ classDiagram
     Resource <|.. ByteArrayResource
 ```
 
-덕분에 리소스를 사용하는 코드는 리소스가 어디서 오든 신경 쓰지 않아도 됩니다. `Resource` 인터페이스의 `getInputStream()`만 호출하면 되니까요.
+그래서 리소스를 사용하는 코드는 리소스가 어디서 오든 신경 쓰지 않아도 됩니다. `Resource` 인터페이스의 `getInputStream()`만 호출하면 되니까요.
 
 클래스패스에서 읽든, 파일 시스템에서 읽든, 원격 URL에서 읽든 동일한 코드로 처리할 수 있습니다.
 
@@ -219,7 +218,7 @@ DispatcherServlet o--> HandlerAdapter
 
 `DispatcherServlet`은 핸들러(컨트롤러)를 직접 실행하지 않습니다. 등록된 `HandlerAdapter`들 중에서 해당 핸들러를 지원하는 어댑터를 찾아서, 그 어댑터에게 실행을 위임합니다.
 
-덕분에 새로운 형태의 컨트롤러가 추가되어도 `DispatcherServlet` 코드는 수정할 필요가 없습니다. 새로운 `HandlerAdapter` 구현체만 추가하면 됩니다.
+이를 통해 새로운 형태의 컨트롤러가 추가되어도 `DispatcherServlet` 코드는 수정할 필요가 없습니다. 새로운 `HandlerAdapter` 구현체만 추가하면 됩니다.
 
 ---
 
@@ -227,7 +226,7 @@ DispatcherServlet o--> HandlerAdapter
 
 `@Cacheable`로 캐시를 사용할 때, 실제로 어떤 캐시 저장소를 쓸지도 전략입니다.
 
-개발 환경에서는 간단한 로컬 메모리 캐시를 쓰다가, 운영 환경에서는 Redis나 EhCache 같은 분산 캐시로 바꿀 수 있어야 합니다. 스프링은 `CacheManager` 인터페이스로 이를 추상화했습니다.
+개발 환경에서는 간단한 로컬 메모리 캐시를 쓰다가, 운영 환경에서는 Redis나 Ehcache 같은 분산 캐시로 바꿀 수 있어야 합니다. 스프링은 `CacheManager` 인터페이스로 이를 추상화했습니다.
 
 ```mermaid
 classDiagram
@@ -245,8 +244,8 @@ classDiagram
         Redis 캐시
     }
 
-    class EhCacheCacheManager {
-        EhCache
+    class JCacheCacheManager {
+        JCache (Ehcache 포함)
     }
 
     class CaffeineCacheManager {
@@ -255,7 +254,7 @@ classDiagram
 
     CacheManager <|.. ConcurrentMapCacheManager
     CacheManager <|.. RedisCacheManager
-    CacheManager <|.. EhCacheCacheManager
+    CacheManager <|.. JCacheCacheManager
     CacheManager <|.. CaffeineCacheManager
 ```
 
@@ -264,7 +263,6 @@ classDiagram
 개발 환경에서 `ConcurrentMapCacheManager`를 쓰다가, 운영 환경에서 `RedisCacheManager`로 바꿔도 비즈니스 로직은 한 줄도 수정하지 않아도 됩니다.
 
 ```java
-
 @Cacheable("users")  // 이 코드는 캐시 구현체가 뭐든 상관없음
 public User findById(Long id) {
     return userRepository.findById(id).orElseThrow();
@@ -276,7 +274,7 @@ public User findById(Long id) {
 @Bean
 public CacheManager cacheManager() {
     // return new ConcurrentMapCacheManager();  // 개발용
-    return new RedisCacheManager(connectionFactory);  // 운영용
+    return RedisCacheManager.create(connectionFactory);  // 운영용
 }
 ```
 
