@@ -9,11 +9,12 @@ public class ToBePullMain {
         weatherData.subscribe(new StatisticsDisplay());
         weatherData.subscribe(new ForecastDisplay());
         weatherData.subscribe(new HeatIndexDisplay());
+        weatherData.subscribe(new WindDisplay());
 
         System.out.println("\n========== 첫 번째 측정 ==========\n");
-        weatherData.setMeasurements(25.0f, 65.0f, 1013.25f);
+        weatherData.setMeasurements(25.0f, 65.0f, 1013.25f, 4.5f);
 
         System.out.println("\n========== 두 번째 측정 ==========\n");
-        weatherData.setMeasurements(30.0f, 80.0f, 1009.50f);
+        weatherData.setMeasurements(30.0f, 80.0f, 1009.50f, 12.0f);
     }
 }

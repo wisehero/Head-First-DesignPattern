@@ -2,6 +2,7 @@ package Chapter_02.observer.tobe.push;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * TO-BE: 옵저버 패턴이 적용된 WeatherData
@@ -27,12 +28,14 @@ public class WeatherData implements WeatherSubject {
 
     @Override
     public void subscribe(WeatherObserver observer) {
+        Objects.requireNonNull(observer, "observer must not be null");
         observers.add(observer);
         System.out.println("[WeatherData] 새로운 옵저버 등록됨: " + observer.getClass().getSimpleName());
     }
 
     @Override
     public void unsubscribe(WeatherObserver observer) {
+        Objects.requireNonNull(observer, "observer must not be null");
         observers.remove(observer);
         System.out.println("[WeatherData] 옵저버 제거됨: " + observer.getClass().getSimpleName());
     }
@@ -40,7 +43,8 @@ public class WeatherData implements WeatherSubject {
     @Override
     public void notifyObservers() {
         // 등록된 모든 옵저버에게 알림 (Push: 데이터를 함께 전달)
-        for (WeatherObserver observer : observers) {
+        // 알림 중 subscribe/unsubscribe가 일어나도 안전하도록 스냅샷 순회
+        for (WeatherObserver observer : new ArrayList<>(observers)) {
             observer.update(temperature, humidity, pressure);
         }
     }

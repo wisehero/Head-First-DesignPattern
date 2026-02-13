@@ -1,6 +1,6 @@
 # 옵저버 패턴 (Observer Pattern)
 
-GoF 디자인 패턴 중 **행위(Behavioral) 패턴**에 속합니다. "발행-구독(Publish-Subscribe)" 패턴이라고도 불립니다.
+GoF 디자인 패턴 중 **행위(Behavioral) 패턴**에 속합니다. 발행-구독(Publish-Subscribe)과 유사하게 설명되기도 하지만, 엄밀히는 구분되는 개념입니다.
 
 ---
 
@@ -189,7 +189,7 @@ flowchart LR
     end
 
     subgraph Pull["Pull 방식"]
-        S2[Subject] -->|" update() "| O2[Observer]
+        S2[Subject] -->|" update(this) "| O2[Observer]
         O2 -->|" getTemperature() "| S2
         O2 -->|" getHumidity() "| S2
     end
@@ -296,7 +296,7 @@ Subject는 "나 바뀌었어!"라는 **알림만 보내고**, Observer가 필요
 sequenceDiagram
     participant Subject as WeatherData (Subject)
     participant ObsA as 현재날씨 디스플레이
-    participant ObsB as 통계 모듈
+    participant ObsB as 불쾌지수 모듈
     Note over Subject: 상태 변경 발생
     Subject ->> ObsA: update(this)
     ObsA ->> Subject: getTemperature()
@@ -316,7 +316,7 @@ Observer는 Subject의 getter를 호출해서 필요한 데이터만 가져갑�
 
 ### 장점
 
-**필요한 것만 가져감**: Observer마다 필요한 데이터가 다를 때 효율적입니다. 현재날씨 디스플레이는 온도만, 통계 모듈은 온도와 습도만 가져가면 됩니다.
+**필요한 것만 가져감**: Observer마다 필요한 데이터가 다를 때 효율적입니다. 현재날씨 디스플레이는 온도만, 불쾌지수 모듈은 온도와 습도만 가져가면 됩니다.
 
 **인터페이스 안정성**: Subject에 새로운 상태(풍속)가 추가되어도 `update()` 시그니처는 바뀌지 않습니다. 기존 Observer들은 수정 없이 그대로 동작하고, 풍속이 필요한 Observer만
 `getWindSpeed()`를 호출하면 됩니다.

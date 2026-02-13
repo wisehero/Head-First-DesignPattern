@@ -4,7 +4,7 @@ package Chapter_02.observer.tobe.pull;
  * 불쾌지수 디스플레이
  * Pull 방식: 온도와 습도만 가져옴
  */
-public class HeatIndexDisplay  implements WeatherObserver{
+public class HeatIndexDisplay implements WeatherObserver {
     @Override
     public void update(WeatherData weatherData) {
         // 온도와 습도만 Pull!
